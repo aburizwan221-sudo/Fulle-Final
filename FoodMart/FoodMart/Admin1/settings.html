@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings - Besa</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--text:#1d1d1d;--muted:#6f6f6f;--line:#f1e2db;--orange:#f4511e;--orange2:#ff7a45;--soft:#fdeee8;--green:#16a34a}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;color:var(--text);background:#fdf6f2;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer}
+
+/* ===== Sidebar ===== */
+.sidebar{width:230px;background:#fff;border-right:1px solid var(--line);padding:20px 14px;position:fixed;inset:0 auto 0 0;display:flex;flex-direction:column;z-index:60;transition:transform .35s ease;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:10px;font-size:26px;font-weight:800;letter-spacing:-.04em;padding:0 8px 20px}
+.brand-mark{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--orange2),var(--orange));display:grid;place-items:center;color:#fff;font-size:16px;font-weight:800}
+.nav a{display:flex;align-items:center;gap:13px;padding:12px 14px;border-radius:10px;font-size:14px;font-weight:500;margin-bottom:6px;color:#444;transition:background .25s,color .25s,transform .25s}
+.nav a i{width:18px;text-align:center;font-size:16px}
+.nav a:hover{background:var(--soft);color:var(--orange);transform:translateX(3px)}
+.nav a.active{background:linear-gradient(135deg,var(--orange2),var(--orange));color:#fff;box-shadow:0 8px 18px rgba(244,81,30,.28)}
+.side-promo{margin-top:auto;background:var(--soft);border-radius:14px;padding:16px}
+.sp-img{height:100px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.sp-img img{max-height:100px;object-fit:contain;animation:floaty 4s ease-in-out infinite}
+.side-promo h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.side-promo p{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;background:var(--orange);color:#fff;font-weight:600;font-size:12px;padding:9px 16px;border-radius:8px;transition:transform .2s,background .2s,box-shadow .2s}
+.btn:hover{background:#d93f10;transform:translateY(-2px);box-shadow:0 8px 16px rgba(244,81,30,.3)}
+
+/* ===== Main / Topbar ===== */
+.main{margin-left:230px;min-width:0;min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:14px 24px;position:sticky;top:0;z-index:30}
+.hamburger{display:none;width:26px;height:18px;position:relative;background:none;border:0;flex-shrink:0}
+.hamburger span{position:absolute;left:0;width:100%;height:2px;background:var(--orange);border-radius:2px;transition:.3s}
+.hamburger span:nth-child(1){top:0}.hamburger span:nth-child(2){top:8px}.hamburger span:nth-child(3){top:16px}
+.hamburger.open span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.search{flex:1;max-width:600px;display:flex;align-items:center;gap:10px;background:#f7f1ee;border:1px solid var(--line);border-radius:10px;padding:0 14px}
+.search input{flex:1;border:0;background:transparent;outline:none;padding:11px 0;font-size:13.5px;font-family:inherit}
+.search:focus-within{border-color:var(--orange);box-shadow:0 0 0 3px rgba(244,81,30,.1)}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:16px}
+.bell{position:relative;background:none;border:0;font-size:19px;color:#333}
+.bell b{position:absolute;top:-6px;right:-8px;background:var(--orange);color:#fff;font-size:10px;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;animation:pulse 2s infinite}
+.lang{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 12px;font-size:13px;display:flex;align-items:center;gap:6px}
+.profile{display:flex;align-items:center;gap:10px}
+.avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;background:#ecd9d1;flex-shrink:0}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.profile strong{font-size:14px;display:block}
+.profile small{font-size:11px;color:var(--muted)}
+
+.content{padding:20px 24px 46px}
+.crumbs{font-size:12.5px;color:#999;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.crumbs .cur{color:var(--orange);font-weight:600}
+.crumbs i{font-size:9px}
+.reveal{opacity:0;transform:translateY(22px);animation:fadeUp .6s ease forwards}
+.d1{animation-delay:.05s}.d2{animation-delay:.12s}.d3{animation-delay:.19s}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 16px rgba(244,81,30,.05)}
+
+.page-head{margin-bottom:22px}
+.page-head h1{font-size:26px;font-weight:800;letter-spacing:-.03em}
+.page-head p{color:var(--muted);font-size:13.5px;margin-top:4px}
+
+.layout{display:grid;grid-template-columns:270px 1fr 230px;gap:22px;align-items:start}
+
+/* Settings nav list */
+.set-nav{padding:12px}
+.set-item{display:flex;align-items:center;gap:14px;padding:14px;border-radius:12px;cursor:pointer;transition:background .2s,transform .2s;margin-bottom:4px}
+.set-item:hover{background:var(--soft);transform:translateX(3px)}
+.set-item.active{background:var(--soft)}
+.set-ic{width:38px;height:38px;border-radius:10px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-size:15px;color:var(--orange);flex-shrink:0;transition:transform .3s}
+.set-item.active .set-ic{background:var(--orange);color:#fff;border-color:var(--orange)}
+.set-item:hover .set-ic{transform:scale(1.08)}
+.set-item b{display:block;font-size:13.5px;font-weight:600}
+.set-item span{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+
+/* Store information form */
+.form-card{padding:26px}
+.form-card h3{font-size:17px;font-weight:700;margin-bottom:20px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.fgroup{display:flex;flex-direction:column;gap:7px}
+.fgroup.full{grid-column:1/-1}
+.fgroup label{font-size:13px;font-weight:600}
+.fgroup input,.fgroup textarea{border:1px solid var(--line);border-radius:9px;padding:12px 14px;font-size:13.5px;font-family:inherit;outline:none;background:#fdfaf8;transition:border-color .2s,box-shadow .2s}
+.fgroup input:focus,.fgroup textarea:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(244,81,30,.1)}
+.logo-row{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.logo-box{width:60px;height:60px;border-radius:14px;background:linear-gradient(135deg,var(--orange2),var(--orange));display:grid;place-items:center;color:#fff;font-size:26px;font-weight:800;flex-shrink:0}
+.ghost-btn{border:1px solid var(--line);background:#fff;font-weight:600;font-size:13px;padding:10px 18px;border-radius:9px;color:#444;transition:background .2s,border-color .2s}
+.ghost-btn:hover{background:var(--soft);border-color:var(--orange);color:var(--orange)}
+.save-btn{background:var(--orange);color:#fff;border:0;font-weight:700;font-size:14px;padding:13px 24px;border-radius:9px;margin-top:6px;transition:background .2s,transform .2s,box-shadow .2s}
+.save-btn:hover{background:#d93f10;transform:translateY(-2px);box-shadow:0 10px 20px rgba(244,81,30,.3)}
+.save-toast{display:inline-flex;align-items:center;gap:8px;color:var(--green);font-weight:600;font-size:13px;margin-left:14px;opacity:0;transition:opacity .3s}
+.save-toast.show{opacity:1}
+
+/* Right promo */
+.right-card{padding:24px;text-align:center}
+.right-img{height:90px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.right-img img{max-height:90px;object-fit:contain;animation:floaty 4s ease-in-out infinite}
+.right-card h4{font-size:16px;font-weight:800;margin-bottom:8px;line-height:1.3}
+.right-card p{font-size:12.5px;color:var(--muted);margin-bottom:16px;line-height:1.5}
+.right-card .btn{width:100%;justify-content:center;padding:12px}
+
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(244,81,30,.5)}70%{box-shadow:0 0 0 8px rgba(244,81,30,0)}100%{box-shadow:0 0 0 0 rgba(244,81,30,0)}}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:55;opacity:0;pointer-events:none;transition:opacity .3s}
+.overlay.show{opacity:1;pointer-events:auto}
+
+@media(max-width:1200px){.layout{grid-template-columns:230px 1fr}.right-card{grid-column:1/-1}}
+@media(max-width:992px){
+  .sidebar{transform:translateX(-100%);box-shadow:6px 0 24px rgba(0,0,0,.15)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .hamburger{display:block}
+}
+@media(max-width:860px){.layout{grid-template-columns:1fr}.set-nav{display:flex;overflow-x:auto;gap:8px}.set-item{flex-direction:column;text-align:center;min-width:110px}}
+@media(max-width:760px){
+  .topbar{padding:12px 16px;gap:10px}.content{padding:14px 16px 40px}
+  .lang,.profile div{display:none}
+  .frow{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><span class="brand-mark">b</span>Besa</div>
+  <nav class="nav">
+    <a href="admin.html"><i class="fa-solid fa-house"></i>Dashboard</a>
+    <a href="./product.html"><i class="fa-solid fa-box"></i>Products</a>
+    <a href="./oder.html"><i class="fa-solid fa-bag-shopping"></i>Orders</a>
+    <a href="customers.html"><i class="fa-solid fa-user"></i>Customers</a>
+
+    <a href="promotions.html"><i class="fa-solid fa-tag"></i>Promotions</a>
+    <a href="settings.html" class="active"><i class="fa-solid fa-gear"></i>Settings</a>
+  </nav>
+  <div class="side-promo">
+    <div class="sp-img"><!-- apni image yahan lagao --><img src="../images/image-removebg-preview.png" alt="Shopping bag"></div>
+    <h4>Grow Your Business</h4>
+    <p>Add new products, manage orders and boost your sales.</p>
+    <button class="btn">Add Product ➜</button>
+  </div>
+</aside>
+<div class="overlay" id="overlay"></div>
+
+<div class="main">
+  <header class="topbar">
+    <button class="hamburger" id="menuBtn" aria-label="menu"><span></span><span></span><span></span></button>
+    <div class="search"><i class="fa-solid fa-magnifying-glass" style="color:#999"></i><input type="text" placeholder="Search for products, categories or anything..."></div>
+    <div class="top-right">
+      <button class="bell"><i class="fa-regular fa-bell"></i><b>3</b></button>
+      <div class="lang"><i class="fa-solid fa-globe" style="color:var(--orange)"></i> English <i class="fa-solid fa-chevron-down" style="font-size:10px"></i></div>
+      <div class="profile">
+        <div class="avatar"><img src="../images/38.png" alt="Amit Sharma"></div>
+        <div><strong>Amit Sharma</strong><small>Admin</small></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="crumbs"><a href="dashboard.html">Dashboard</a><i class="fa-solid fa-chevron-right"></i><span class="cur">Settings</span></div>
+
+    <section class="page-head reveal d1">
+      <h1>Settings</h1>
+      <p>Manage your store settings and preferences.</p>
+    </section>
+
+    <div class="layout">
+      <!-- Settings nav -->
+      <div class="card set-nav reveal d1">
+        <div class="set-item active" data-panel="store"><span class="set-ic"><i class="fa-solid fa-store"></i></span><div><b>Store Information</b><span>Update your store details</span></div></div>
+        <div class="set-item" data-panel="payment"><span class="set-ic"><i class="fa-solid fa-credit-card"></i></span><div><b>Payment Settings</b><span>Manage payment methods</span></div></div>
+        <div class="set-item" data-panel="shipping"><span class="set-ic"><i class="fa-solid fa-truck"></i></span><div><b>Shipping Settings</b><span>Configure delivery options</span></div></div>
+        <div class="set-item" data-panel="notif"><span class="set-ic"><i class="fa-solid fa-bell"></i></span><div><b>Notifications</b><span>Set email &amp; push notifications</span></div></div>
+        <div class="set-item" data-panel="account"><span class="set-ic"><i class="fa-solid fa-user-gear"></i></span><div><b>Account Settings</b><span>Manage admin account</span></div></div>
+        <div class="set-item" data-panel="security"><span class="set-ic"><i class="fa-solid fa-shield-halved"></i></span><div><b>Security</b><span>Password &amp; security settings</span></div></div>
+      </div>
+
+      <!-- Store info form -->
+      <div class="card form-card reveal d2">
+        <h3>Store Information</h3>
+
+        <div class="logo-row">
+          <div class="logo-box">b</div>
+          <button class="ghost-btn"><i class="fa-solid fa-image" style="margin-right:6px;color:var(--orange)"></i>Change Logo</button>
+        </div>
+
+        <div class="frow">
+          <div class="fgroup"><label>Store Name</label><input type="text" value="Besa Store"></div>
+          <div class="fgroup"><label>Email Address</label><input type="email" value="support@besa.com"></div>
+        </div>
+        <div class="frow">
+          <div class="fgroup"><label>Phone Number</label><input type="tel" value="+91 98765 43210"></div>
+          <div class="fgroup"><label>Address</label><input type="text" value="123 Business Street, New Delhi, India - 110001"></div>
+        </div>
+
+        <button class="save-btn" id="saveBtn">Save Changes</button>
+        <span class="save-toast" id="saveToast"><i class="fa-solid fa-circle-check"></i>Saved successfully</span>
+      </div>
+
+      <!-- Right promo -->
+      <div class="card right-card reveal d3">
+        <div class="right-img"><img src="../images/47.png" alt="Storefront"></div>
+        <h4>Keep Your Store Running Smoothly</h4>
+        <p>Manage your settings, stay secure and grow faster.</p>
+        <button class="btn">Visit Store ➜</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay'),menuBtn=document.getElementById('menuBtn');
+  function toggleSidebar(o){sidebar.classList.toggle('open',o);overlay.classList.toggle('show',o);menuBtn.classList.toggle('open',o);}
+  menuBtn.addEventListener('click',()=>toggleSidebar(!sidebar.classList.contains('open')));
+  overlay.addEventListener('click',()=>toggleSidebar(false));
+  addEventListener('resize',()=>{if(innerWidth>992)toggleSidebar(false);});
+
+  // Settings nav switch (visual only, Store Information panel always shown for now)
+  document.querySelectorAll('.set-item').forEach(item=>item.addEventListener('click',()=>{
+    document.querySelectorAll('.set-item').forEach(x=>x.classList.remove('active'));
+    item.classList.add('active');
+  }));
+
+  // Save changes toast
+  const saveBtn=document.getElementById('saveBtn'),toast=document.getElementById('saveToast');
+  saveBtn.addEventListener('click',()=>{
+    toast.classList.add('show');
+    setTimeout(()=>toast.classList.remove('show'),2200);
+  });
+</script>
+</body>
+</html>
